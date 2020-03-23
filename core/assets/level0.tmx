@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="2">
+ <properties>
+  <property name="GroundHitboxLayer" type="int" value="2"/>
+ </properties>
+ <tileset firstgid="1" source="Jungle TileSet.tsx"/>
+ <layer id="2" name="layer0" width="100" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt10EKgzAUhOGX3KCKepSqaO9/liptj9ApEjAQ3FjJIv8HAwFdPUPGmAEAAADlejmzt/Jx8Rp5NN6sVTofr5HHpNnPysPHa6AUN+33RZ2w0gvZ3fUtemVQRs4h4LSn2843/F+Ybao7UveN8M9L11zj1+WVUie6I8x+/+zofZx31OXhvrGfPd2fD7NH6b5zvBZp
+  </data>
+ </layer>
+ <layer id="1" name="layer1" width="100" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt1rENgzAQhWE7I0CK7AALBEYgqdgEaBkkyUCwQdbhgtwhgwE5Ruj/pFeedLqHAKUAAADwb4VW6iF56tCb4KeSHmpJQx+H8JIe3pIPfXiXmKShF8GoNu+iMvQiGHUmfehFAMCTSL458UKulv8xl9m5eUzd5VbZQnLLPV1m5+YxRR9+fPW23OjDC5e7bM3ePtrLumfkDI7cx9qcwQAqRUA3
+  </data>
+ </layer>
+ <objectgroup id="3" name="ground">
+  <object id="1" x="0" y="272" width="368" height="48"/>
+ </objectgroup>
+</map>
