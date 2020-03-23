@@ -1,0 +1,41 @@
+
+player.png
+size: 1024,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+idle
+  rotate: false
+  xy: 2, 4
+  size: 252, 35
+  orig: 252, 35
+  offset: 0, 0
+  index: -1
+jump outline
+  rotate: false
+  xy: 512, 3
+  size: 19, 36
+  orig: 19, 36
+  offset: 0, 0
+  index: -1
+landing outline
+  rotate: false
+  xy: 488, 2
+  size: 22, 37
+  orig: 22, 37
+  offset: 0, 0
+  index: -1
+midair
+  rotate: false
+  xy: 442, 2
+  size: 44, 37
+  orig: 44, 37
+  offset: 0, 0
+  index: -1
+run
+  rotate: false
+  xy: 256, 5
+  size: 184, 34
+  orig: 184, 34
+  offset: 0, 0
+  index: -1
