@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import junglejump.screen.PlayScreen;
+import junglejump.tools.WorldConst;
 
 public class Player extends Sprite {
 
@@ -61,7 +62,7 @@ public class Player extends Sprite {
 
 
         createPlayer();
-        setBounds(0,0,21 / PlayScreen.PPM,39 / PlayScreen.PPM);
+        setBounds(0,0,21 / WorldConst.PPM,39 / WorldConst.PPM);
         setRegion(idle);
     }
 
@@ -135,7 +136,7 @@ public class Player extends Sprite {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape polygonShape = new PolygonShape();
         Vector2 hitboxDimension = new Vector2(idle.getRegionWidth(), idle.getRegionHeight());
-        hitboxDimension.scl(1 / (2 * PlayScreen.PPM));
+        hitboxDimension.scl(1 / (2 * WorldConst.PPM));
         polygonShape.setAsBox(hitboxDimension.x,hitboxDimension.y, new Vector2(-hitboxDimension.x,-hitboxDimension.y),0);
         fixtureDef.shape = polygonShape;
         body.createFixture(fixtureDef);

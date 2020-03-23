@@ -7,28 +7,19 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import junglejump.JungleJump;
 import junglejump.sprite.Background;
 import junglejump.sprite.Player;
+import junglejump.tools.WorldConst;
 import junglejump.tools.WorldCreator;
 
 public class PlayScreen implements Screen {
-
-    private final static float GRAVITY = 9.81f;
-
-    private final static int WORLD_WIDTH = 100;
-    private final static int WORLD_HEIGHT = 60;
-
-    public final static float PPM = 16f;
 
     private JungleJump game;
 
@@ -55,17 +46,17 @@ public class PlayScreen implements Screen {
 
         //Initialize Camera
         float aspectRatio = (float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
-        camera = new OrthographicCamera(WORLD_WIDTH / 2f,WORLD_HEIGHT * aspectRatio);
+        camera = new OrthographicCamera(WorldConst.WORLD_WIDTH / 2f,WorldConst.WORLD_HEIGHT * aspectRatio);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
         //Initialize TiledMap
         TmxMapLoader loader = new TmxMapLoader();
         map = loader.load("map1.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / PPM);
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / WorldConst.PPM);
 
         //Initialize Box2D World
-        world = new World(Vector2.Y.scl(-GRAVITY),true);
+        world = new World(Vector2.Y.scl(-WorldConst.GRAVITY),true);
         debugRenderer = new Box2DDebugRenderer();
         WorldCreator creator = new WorldCreator(world, map);
         creator.init();
@@ -138,7 +129,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width/(WORLD_WIDTH / 2f);
+        camera.viewportWidth = width/(WorldConst.WORLD_WIDTH / 2f);
         camera.viewportHeight = camera.viewportWidth * height/width;
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();

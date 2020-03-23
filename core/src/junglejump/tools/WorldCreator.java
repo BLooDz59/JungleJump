@@ -18,7 +18,7 @@ public class WorldCreator {
     }
 
     public void init() {
-        float PPM = PlayScreen.PPM;
+        float PPM = WorldConst.PPM;
         BodyDef bodyDef = new BodyDef();
         PolygonShape polygonShape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
