@@ -22,9 +22,9 @@ public class Player extends Sprite {
     private TextureRegion idle;
     private TextureRegion jumpTexture;
     private TextureRegion landingTexture;
-    private Animation idleAnimation;
-    private Animation runningAnimation;
-    private Animation midAirAnimation;
+    private Animation<TextureRegion> idleAnimation;
+    private Animation<TextureRegion> runningAnimation;
+    private Animation<TextureRegion> midAirAnimation;
 
     private float stateTimer;
     private boolean runningRight;
@@ -75,7 +75,7 @@ public class Player extends Sprite {
         TextureRegion region;
         switch (currentState) {
             case RUNNING:
-                region = (TextureRegion) runningAnimation.getKeyFrame(stateTimer,true);
+                region = runningAnimation.getKeyFrame(stateTimer,true);
                 break;
             case JUMPING:
                 region = jumpTexture;
@@ -84,10 +84,10 @@ public class Player extends Sprite {
                 region = landingTexture;
                 break;
             case MID_AIR:
-                region = (TextureRegion) midAirAnimation.getKeyFrame(stateTimer);
+                region = midAirAnimation.getKeyFrame(stateTimer);
                 break;
             default:
-                region = (TextureRegion) idleAnimation.getKeyFrame(stateTimer, true);
+                region = idleAnimation.getKeyFrame(stateTimer, true);
                 break;
 
         }

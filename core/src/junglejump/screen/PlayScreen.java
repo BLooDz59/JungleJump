@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import junglejump.JungleJump;
 import junglejump.sprite.Background;
 import junglejump.sprite.Player;
+import junglejump.tools.WorldCreator;
 
 public class PlayScreen implements Screen {
 
@@ -31,62 +32,48 @@ public class PlayScreen implements Screen {
 
     private JungleJump game;
 
-    private OrthogonalTiledMapRenderer renderer;
-    private Box2DDebugRenderer debugRenderer;
-
+    //Screen fields
     private OrthographicCamera camera;
 
+    //Tilemap fields
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
+
+    //Box2D fields
+    private World world;
+    private Box2DDebugRenderer debugRenderer;
+
+    //Assets fields
+    private Player player;
     private Background background;
 
-    private World world;
-
-    private Player player;
-    private TextureAtlas playerAtlas;
-
+    //Debug fields
     private boolean activeDebug = false;
 
     public PlayScreen(JungleJump game) {
         this.game = game;
-        playerAtlas = new TextureAtlas("player.atlas");
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
-        camera = new OrthographicCamera(WORLD_WIDTH / 2f,WORLD_HEIGHT * (h / w));
-
+        //Initialize Camera
+        float aspectRatio = (float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
+        camera = new OrthographicCamera(WORLD_WIDTH / 2f,WORLD_HEIGHT * aspectRatio);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
+        //Initialize TiledMap
         TmxMapLoader loader = new TmxMapLoader();
-        TiledMap map = loader.load("map1.tmx");
+        map = loader.load("map1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PPM);
 
+        //Initialize Box2D World
         world = new World(Vector2.Y.scl(-GRAVITY),true);
         debugRenderer = new Box2DDebugRenderer();
+        WorldCreator creator = new WorldCreator(world, map);
+        creator.init();
 
-        background = new Background(0);
-
+        //Initialize Sprites
+        TextureAtlas playerAtlas = new TextureAtlas("player.atlas");
         player = new Player(world, playerAtlas);
-
-        BodyDef bodyDef = new BodyDef();
-        PolygonShape polygonShape = new PolygonShape();
-        FixtureDef fixtureDef = new FixtureDef();
-        Body body;
-
-        for (MapObject object : map.getLayers().get(1).getObjects()) {
-            if (object instanceof RectangleMapObject) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                bodyDef.type = BodyDef.BodyType.StaticBody;
-                bodyDef.position.set(rect.x / PPM + (rect.getWidth() / PPM) / 2, rect.y / PPM + (rect.getHeight() / PPM) / 2);
-
-                body = world.createBody(bodyDef);
-
-                polygonShape.setAsBox((rect.getWidth() / PPM) / 2, (rect.getHeight() / PPM) / 2);
-                fixtureDef.shape = polygonShape;
-                fixtureDef.friction = 1f;
-                body.createFixture(fixtureDef);
-            }
-        }
+        background = new Background(0);
     }
 
     @Override
@@ -98,8 +85,7 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         update(delta);
         game.spriteBatch.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        clearScreen();
 
         game.spriteBatch.begin();
         for (Texture texture : background.getTextures()) {
@@ -118,6 +104,11 @@ public class PlayScreen implements Screen {
         }
     }
 
+    private void clearScreen() {
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
+
     private void update(float dt) {
         handleInput(dt);
         world.step(1/60f, 6,2);
@@ -128,10 +119,10 @@ public class PlayScreen implements Screen {
 
     private void handleInput(float dt) {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.body.getLinearVelocity().x <= 2) {
-            player.body.applyLinearImpulse(new Vector2(1.5f, 0), player.body.getWorldCenter(), true);
+            player.body.applyLinearImpulse(new Vector2(1f, 0), player.body.getWorldCenter(), true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.body.getLinearVelocity().x >= -2) {
-            player.body.applyLinearImpulse(new Vector2(-1.5f, 0), player.body.getWorldCenter(), true);
+            player.body.applyLinearImpulse(new Vector2(-1f, 0), player.body.getWorldCenter(), true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && player.body.getLinearVelocity().y == 0) {
             player.body.applyLinearImpulse(new Vector2(0f, 10f), player.body.getWorldCenter(), true);
