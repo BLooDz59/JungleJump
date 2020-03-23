@@ -7,10 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import junglejump.screen.PlayScreen;
 import junglejump.tools.WorldConst;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements Disposable {
 
     public enum State { IDLE, JUMPING, FALLING, RUNNING, MID_AIR }
 
@@ -141,5 +142,12 @@ public class Player extends Sprite {
         fixtureDef.shape = polygonShape;
         body.createFixture(fixtureDef);
 
+    }
+
+    @Override
+    public void dispose() {
+        idle.getTexture().dispose();
+        jumpTexture.getTexture().dispose();
+        landingTexture.getTexture().dispose();
     }
 }

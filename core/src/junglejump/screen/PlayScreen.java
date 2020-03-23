@@ -35,6 +35,7 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer debugRenderer;
 
     //Assets fields
+    private TextureAtlas playerAtlas;
     private Player player;
     private Background background;
 
@@ -62,7 +63,7 @@ public class PlayScreen implements Screen {
         creator.init();
 
         //Initialize Sprites
-        TextureAtlas playerAtlas = new TextureAtlas("player.atlas");
+        playerAtlas = new TextureAtlas("player.atlas");
         player = new Player(world, playerAtlas);
         background = new Background(0);
     }
@@ -152,6 +153,11 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        map.dispose();
+        world.dispose();
+        renderer.dispose();
+        debugRenderer.dispose();
+        playerAtlas.dispose();
+        player.dispose();
     }
 }
