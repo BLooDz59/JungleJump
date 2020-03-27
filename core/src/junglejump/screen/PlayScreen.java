@@ -2,6 +2,7 @@ package junglejump.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -98,32 +99,30 @@ public class PlayScreen implements Screen {
     }
 
     private void update(float dt) {
-        handleInput(dt);
+        handleInput();
         world.step(WorldConst.TIME_STEP, WorldConst.VELOCITY_ITERATIONS, WorldConst.POSITIONS_ITERATIONS);
         player.update(dt);
+        camera.position.set(player.body.getPosition().x, camera.position.y, 0);
+        camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth  / 2f,  100 - camera.viewportWidth  / 2f);
+        camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2f, 100 - camera.viewportHeight / 2f);
         camera.update();
         renderer.setView(camera);
         System.out.println(renderer.getViewBounds().toString());
     }
 
-    private void handleInput(float dt) {
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.body.getLinearVelocity().x <= 2) {
+    private void handleInput() {
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.move(Player.Direction.RIGHT);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.body.getLinearVelocity().x >= -2) {
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             player.move(Player.Direction.LEFT);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && player.body.getLinearVelocity().y == 0) {
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && player.body.getLinearVelocity().y == 0) {
             player.body.applyLinearImpulse(new Vector2(0f, 10f), player.body.getWorldCenter(), true);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.O)) {
             activeDebug = !activeDebug;
         }
-
-        camera.position.set(player.body.getPosition().x, camera.position.y, 0);
-
-        camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth  / 2f,  100 - camera.viewportWidth  / 2f);
-        camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2f, 100 - camera.viewportHeight / 2f);
     }
 
     @Override
