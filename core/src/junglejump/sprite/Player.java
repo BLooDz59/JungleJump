@@ -7,11 +7,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import junglejump.screen.PlayScreen;
+import com.badlogic.gdx.utils.Disposable;
+import junglejump.tools.WorldConst;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements Disposable {
 
     public enum State { IDLE, JUMPING, FALLING, RUNNING, MID_AIR }
+
+    public enum Direction { RIGHT, LEFT, STANDING }
 
     private State currentState;
     private State previousState;
@@ -22,16 +25,21 @@ public class Player extends Sprite {
     private TextureRegion idle;
     private TextureRegion jumpTexture;
     private TextureRegion landingTexture;
-    private Animation idleAnimation;
-    private Animation runningAnimation;
-    private Animation midAirAnimation;
+    private Animation<TextureRegion> idleAnimation;
+    private Animation<TextureRegion> runningAnimation;
+    private Animation<TextureRegion> midAirAnimation;
 
     private float stateTimer;
     private boolean runningRight;
 
+    private float speed;
+    private Direction direction;
+
     public Player(World world, TextureAtlas atlas) {
         super(atlas.findRegion("idle"));
         this.world = world;
+        speed = 0.15f;
+        direction = Direction.STANDING;
 
         currentState = State.IDLE;
         previousState = State.IDLE;
@@ -42,17 +50,17 @@ public class Player extends Sprite {
         for (int i = 0; i < 12; i++) {
             frames.add(new TextureRegion(getTexture(), 2 + i * 21,0,21,39));
         }
-        idleAnimation = new Animation(0.1f, frames);
+        idleAnimation = new Animation<>(0.1f, frames);
         frames.clear();
         for (int i = 13; i < 19; i++) {
             frames.add(new TextureRegion(getTexture(), 2 + i * 23,0,23,39));
         }
-        runningAnimation = new Animation(0.1f, frames);
+        runningAnimation = new Animation<>(0.1f, frames);
         frames.clear();
         for (int i = 20; i < 22; i++) {
             frames.add(new TextureRegion(getTexture(), 1 + i * 22,0,23,39));
         }
-        midAirAnimation = new Animation(0.7f, frames);
+        midAirAnimation = new Animation<>(0.7f, frames);
 
 
         idle = new TextureRegion(getTexture(),0,0,21,39);
@@ -61,7 +69,7 @@ public class Player extends Sprite {
 
 
         createPlayer();
-        setBounds(0,0,21 / PlayScreen.PPM,39 / PlayScreen.PPM);
+        setBounds(0,0,21 / WorldConst.PPM,39 / WorldConst.PPM);
         setRegion(idle);
     }
 
@@ -75,7 +83,7 @@ public class Player extends Sprite {
         TextureRegion region;
         switch (currentState) {
             case RUNNING:
-                region = (TextureRegion) runningAnimation.getKeyFrame(stateTimer,true);
+                region = runningAnimation.getKeyFrame(stateTimer,true);
                 break;
             case JUMPING:
                 region = jumpTexture;
@@ -84,26 +92,28 @@ public class Player extends Sprite {
                 region = landingTexture;
                 break;
             case MID_AIR:
-                region = (TextureRegion) midAirAnimation.getKeyFrame(stateTimer);
+                region = midAirAnimation.getKeyFrame(stateTimer);
                 break;
             default:
-                region = (TextureRegion) idleAnimation.getKeyFrame(stateTimer, true);
+                region = idleAnimation.getKeyFrame(stateTimer, true);
                 break;
 
         }
 
-        if((body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()){
+        if((direction == Direction.LEFT || !runningRight) && !region.isFlipX()){
             region.flip(true, false);
             runningRight = false;
         }
 
-        else if((body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()){
+        else if((direction == Direction.RIGHT || runningRight) && region.isFlipX()){
             region.flip(true, false);
             runningRight = true;
         }
 
         stateTimer = currentState == previousState ? stateTimer + dt : 0;
         previousState = currentState;
+
+        direction = Direction.STANDING;
 
         return region;
     }
@@ -118,12 +128,30 @@ public class Player extends Sprite {
         else if(body.getLinearVelocity().y < 0) {
             return State.FALLING;
         }
-        else if(body.getLinearVelocity().x != 0) {
+        else if(direction != Direction.STANDING) {
             return State.RUNNING;
         }
         else {
             return State.IDLE;
         }
+    }
+
+    public void move(Direction dir) {
+        float delta = 0;
+        switch (dir) {
+            case LEFT:
+                direction = Direction.LEFT;
+                delta -= speed;
+                break;
+            case RIGHT:
+                direction = Direction.RIGHT;
+                delta += speed;
+                break;
+            default:
+                direction = Direction.STANDING;
+                break;
+        }
+        body.setTransform(body.getPosition().x + delta, body.getPosition().y, body.getAngle());
     }
 
     public void createPlayer() {
@@ -135,10 +163,17 @@ public class Player extends Sprite {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape polygonShape = new PolygonShape();
         Vector2 hitboxDimension = new Vector2(idle.getRegionWidth(), idle.getRegionHeight());
-        hitboxDimension.scl(1 / (2 * PlayScreen.PPM));
+        hitboxDimension.scl(1 / (2 * WorldConst.PPM));
         polygonShape.setAsBox(hitboxDimension.x,hitboxDimension.y, new Vector2(-hitboxDimension.x,-hitboxDimension.y),0);
         fixtureDef.shape = polygonShape;
         body.createFixture(fixtureDef);
 
+    }
+
+    @Override
+    public void dispose() {
+        idle.getTexture().dispose();
+        jumpTexture.getTexture().dispose();
+        landingTexture.getTexture().dispose();
     }
 }
