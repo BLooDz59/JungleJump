@@ -120,10 +120,7 @@ public class PlayScreen implements Screen {
             activeDebug = !activeDebug;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            camera.translate(5,0);
-        }
-
+        camera.position.set(player.body.getPosition().x, camera.position.y, 0);
 
         camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth  / 2f,  100 - camera.viewportWidth  / 2f);
         camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2f, 100 - camera.viewportHeight / 2f);
