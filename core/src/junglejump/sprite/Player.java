@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import junglejump.screen.PlayScreen;
 import junglejump.tools.WorldConst;
 
 public class Player extends Sprite implements Disposable {
@@ -44,17 +43,17 @@ public class Player extends Sprite implements Disposable {
         for (int i = 0; i < 12; i++) {
             frames.add(new TextureRegion(getTexture(), 2 + i * 21,0,21,39));
         }
-        idleAnimation = new Animation(0.1f, frames);
+        idleAnimation = new Animation<>(0.1f, frames);
         frames.clear();
         for (int i = 13; i < 19; i++) {
             frames.add(new TextureRegion(getTexture(), 2 + i * 23,0,23,39));
         }
-        runningAnimation = new Animation(0.1f, frames);
+        runningAnimation = new Animation<>(0.1f, frames);
         frames.clear();
         for (int i = 20; i < 22; i++) {
             frames.add(new TextureRegion(getTexture(), 1 + i * 22,0,23,39));
         }
-        midAirAnimation = new Animation(0.7f, frames);
+        midAirAnimation = new Animation<>(0.7f, frames);
 
 
         idle = new TextureRegion(getTexture(),0,0,21,39);
