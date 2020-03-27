@@ -14,6 +14,8 @@ public class Player extends Sprite implements Disposable {
 
     public enum State { IDLE, JUMPING, FALLING, RUNNING, MID_AIR }
 
+    public enum Direction { RIGHT, LEFT, STANDING }
+
     private State currentState;
     private State previousState;
 
@@ -30,9 +32,14 @@ public class Player extends Sprite implements Disposable {
     private float stateTimer;
     private boolean runningRight;
 
+    private float speed;
+    private Direction direction;
+
     public Player(World world, TextureAtlas atlas) {
         super(atlas.findRegion("idle"));
         this.world = world;
+        speed = 0.15f;
+        direction = Direction.STANDING;
 
         currentState = State.IDLE;
         previousState = State.IDLE;
@@ -93,18 +100,20 @@ public class Player extends Sprite implements Disposable {
 
         }
 
-        if((body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()){
+        if((direction == Direction.LEFT || !runningRight) && !region.isFlipX()){
             region.flip(true, false);
             runningRight = false;
         }
 
-        else if((body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()){
+        else if((direction == Direction.RIGHT || runningRight) && region.isFlipX()){
             region.flip(true, false);
             runningRight = true;
         }
 
         stateTimer = currentState == previousState ? stateTimer + dt : 0;
         previousState = currentState;
+
+        direction = Direction.STANDING;
 
         return region;
     }
@@ -119,12 +128,30 @@ public class Player extends Sprite implements Disposable {
         else if(body.getLinearVelocity().y < 0) {
             return State.FALLING;
         }
-        else if(body.getLinearVelocity().x != 0) {
+        else if(direction != Direction.STANDING) {
             return State.RUNNING;
         }
         else {
             return State.IDLE;
         }
+    }
+
+    public void move(Direction dir) {
+        float delta = 0;
+        switch (dir) {
+            case LEFT:
+                direction = Direction.LEFT;
+                delta -= speed;
+                break;
+            case RIGHT:
+                direction = Direction.RIGHT;
+                delta += speed;
+                break;
+            default:
+                direction = Direction.STANDING;
+                break;
+        }
+        body.setTransform(body.getPosition().x + delta, body.getPosition().y, body.getAngle());
     }
 
     public void createPlayer() {

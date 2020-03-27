@@ -108,10 +108,10 @@ public class PlayScreen implements Screen {
 
     private void handleInput(float dt) {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.body.getLinearVelocity().x <= 2) {
-            player.body.applyLinearImpulse(new Vector2(1f, 0), player.body.getWorldCenter(), true);
+            player.move(Player.Direction.RIGHT);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.body.getLinearVelocity().x >= -2) {
-            player.body.applyLinearImpulse(new Vector2(-1f, 0), player.body.getWorldCenter(), true);
+            player.move(Player.Direction.LEFT);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && player.body.getLinearVelocity().y == 0) {
             player.body.applyLinearImpulse(new Vector2(0f, 10f), player.body.getWorldCenter(), true);
