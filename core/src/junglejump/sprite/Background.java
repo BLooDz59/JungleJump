@@ -1,27 +1,26 @@
 package junglejump.sprite;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
 public class Background {
 
-    Array<Texture> textures;
-    Vector2 position;
+    private Array<Texture> textures;
+    private float x;
 
     public Background(float x) {
         textures = new Array<>();
         for(int i = 1; i <= 5; i++) {
             textures.add(new Texture("backgrounds/plx-" + i + ".png"));
         }
-        position = new Vector2(x, 0);
+        this.x = x;
     }
 
-    public Array<Texture> getTextures() {
-        return textures;
-    }
-
-    public Vector2 getPosition() {
-        return position;
+    public void draw(SpriteBatch sb, float width, float height) {
+        for (Texture texture : textures) {
+            sb.draw(texture,x, 0, width, height);
+            sb.draw(texture,x + width, 0, width, height);
+        }
     }
 }

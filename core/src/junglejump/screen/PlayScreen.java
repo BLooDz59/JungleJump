@@ -47,9 +47,7 @@ public class PlayScreen implements Screen {
 
         //Initialize Camera
         float aspectRatio = (float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
-        camera = new OrthographicCamera(WorldConst.WORLD_WIDTH / 2f,WorldConst.WORLD_HEIGHT * aspectRatio);
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-        camera.update();
+        camera = new OrthographicCamera();
 
         //Initialize TiledMap
         TmxMapLoader loader = new TmxMapLoader();
@@ -80,9 +78,7 @@ public class PlayScreen implements Screen {
         clearScreen();
 
         game.spriteBatch.begin();
-        for (Texture texture : background.getTextures()) {
-            game.spriteBatch.draw(texture, background.getPosition().x, background.getPosition().y, camera.viewportWidth, camera.viewportHeight);
-        }
+        background.draw(game.spriteBatch, camera.viewportHeight * (16/9f), camera.viewportHeight);
         game.spriteBatch.end();
 
         renderer.render();
@@ -107,6 +103,7 @@ public class PlayScreen implements Screen {
         player.update(dt);
         camera.update();
         renderer.setView(camera);
+        System.out.println(renderer.getViewBounds().toString());
     }
 
     private void handleInput(float dt) {
@@ -123,14 +120,18 @@ public class PlayScreen implements Screen {
             activeDebug = !activeDebug;
         }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            camera.translate(5,0);
+        }
 
-        camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth  / 2f, 100 - camera.viewportWidth  / 2f);
+
+        camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth  / 2f,  100 - camera.viewportWidth  / 2f);
         camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2f, 100 - camera.viewportHeight / 2f);
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width/(WorldConst.WORLD_WIDTH / 2f);
+        camera.viewportWidth = width / (2*WorldConst.PPM);
         camera.viewportHeight = camera.viewportWidth * height/width;
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
