@@ -8,10 +8,17 @@ public class JungleJump extends Game {
 
 	public SpriteBatch spriteBatch;
 
+	public MenuScreen MENU_SCREEN;
+	public PlayScreen PLAY_SCREEN;
+
 	@Override
 	public void create() {
 		spriteBatch = new SpriteBatch();
-		setScreen(new MenuScreen(this));
+
+		MENU_SCREEN = new MenuScreen(this);
+		PLAY_SCREEN = new PlayScreen(this);
+
+		setScreen(MENU_SCREEN);
 	}
 
 	@Override
