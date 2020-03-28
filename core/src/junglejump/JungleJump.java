@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import junglejump.screen.MenuScreen;
 import junglejump.screen.PlayScreen;
+import junglejump.screen.SettingScreen;
 
 public class JungleJump extends Game {
 
@@ -11,6 +12,7 @@ public class JungleJump extends Game {
 
 	public MenuScreen MENU_SCREEN;
 	public PlayScreen PLAY_SCREEN;
+	public SettingScreen SETTING_SCREEN;
 
 	@Override
 	public void create() {
@@ -18,6 +20,7 @@ public class JungleJump extends Game {
 
 		MENU_SCREEN = new MenuScreen(this);
 		PLAY_SCREEN = new PlayScreen(this);
+		SETTING_SCREEN = new SettingScreen(this);
 
 		setScreen(MENU_SCREEN);
 	}
