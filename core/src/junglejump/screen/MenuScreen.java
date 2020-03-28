@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -34,9 +35,17 @@ public class MenuScreen implements Screen {
         table.setDebug(true);
         stage.addActor(table);
 
+        //Create Font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Pixellari.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        parameter.size = 16;
+        BitmapFont font = generator.generateFont(parameter);
+        generator.dispose();
+
         //Create Buttons
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = new BitmapFont();
+        style.font = font;
         TextButton textButton = new TextButton("New Game", style);
         TextButton settingsButton = new TextButton("Settings", style);
         TextButton exitButton = new TextButton("Exit", style);
