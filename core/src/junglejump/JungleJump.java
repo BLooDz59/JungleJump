@@ -11,7 +11,7 @@ public class JungleJump extends Game {
 	@Override
 	public void create() {
 		spriteBatch = new SpriteBatch();
-		setScreen(new PlayScreen(this));
+		setScreen(new MenuScreen(this));
 	}
 
 	@Override

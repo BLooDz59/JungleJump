@@ -3,10 +3,10 @@
 
 # Features
 List of features to implement before next release :
-- Create Main Menu
-    - Play Button
-    - Settings Button
-    - Quit Button
+- Create Main Menu ✅
+    - Play Button ✅
+    - Settings Button ✅
+    - Quit Button ✅
 - Create a demo level
     - Start Point
     - Coins to collect
