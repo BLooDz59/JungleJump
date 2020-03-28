@@ -2,6 +2,7 @@ package junglejump;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import junglejump.screen.MenuScreen;
 import junglejump.screen.PlayScreen;
 
 public class JungleJump extends Game {
