@@ -12,8 +12,8 @@ List of features to implement before next release :
     - Coins to collect
     - End Point
 - Add coin ✅
-- Add UI
-    - Score
+- Add UI ✅
+    - Score ✅
 
 # Known bugs
 List of known bugs to fix :
