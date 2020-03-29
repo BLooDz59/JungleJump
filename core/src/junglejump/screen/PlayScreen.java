@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -14,6 +16,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import junglejump.JungleJump;
 import junglejump.sprite.Background;
 import junglejump.sprite.Coin;
@@ -21,6 +30,7 @@ import junglejump.sprite.Player;
 import junglejump.tools.WorldConst;
 import junglejump.tools.WorldContactListener;
 import junglejump.tools.WorldCreator;
+import junglejump.ui.GameHud;
 
 public class PlayScreen implements Screen {
 
@@ -41,12 +51,23 @@ public class PlayScreen implements Screen {
     private TextureAtlas playerAtlas;
     private Player player;
     private Background background;
+    private Coin coin;
+
+    //UI fields
+    private GameHud gameHUD;
+    private Stage stage;
+    private Table table;
+
+    //Variable fields
+    private int score;
 
     //Debug fields
     private boolean activeDebug = false;
 
     public PlayScreen(JungleJump game) {
         this.game = game;
+
+        score = 0;
 
         //Initialize Camera
         float aspectRatio = (float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
@@ -68,6 +89,10 @@ public class PlayScreen implements Screen {
         playerAtlas = new TextureAtlas("player.atlas");
         player = new Player(world, playerAtlas);
         background = new Background(0);
+        coin = new Coin(10,10,world);
+
+        //Initialize UI
+        gameHUD = new GameHud(this);
     }
 
     @Override
@@ -89,7 +114,10 @@ public class PlayScreen implements Screen {
 
         game.spriteBatch.begin();
         player.draw(game.spriteBatch);
+        coin.draw(game.spriteBatch);
         game.spriteBatch.end();
+
+        gameHUD.draw();
 
         if (activeDebug) {
             debugRenderer.render(world, camera.combined);
@@ -105,6 +133,7 @@ public class PlayScreen implements Screen {
         handleInput();
         world.step(WorldConst.TIME_STEP, WorldConst.VELOCITY_ITERATIONS, WorldConst.POSITIONS_ITERATIONS);
         player.update(dt);
+        coin.update(dt);
         camera.position.set(player.body.getPosition().x, camera.position.y, 0);
         camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth  / 2f,  100 - camera.viewportWidth  / 2f);
         camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2f, 100 - camera.viewportHeight / 2f);
@@ -124,6 +153,7 @@ public class PlayScreen implements Screen {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.O)) {
             activeDebug = !activeDebug;
+            gameHUD.debug = !gameHUD.debug;
         }
     }
 
@@ -159,5 +189,11 @@ public class PlayScreen implements Screen {
         playerAtlas.dispose();
         player.dispose();
         background.dispose();
+        gameHUD.dispose();
+        coin.dispose();
+    }
+
+    public int getScore() {
+        return score;
     }
 }

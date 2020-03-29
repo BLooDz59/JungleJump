@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import junglejump.ui.GameHud;
 
 
 public class Coin extends Sprite implements Disposable {
@@ -51,7 +52,7 @@ public class Coin extends Sprite implements Disposable {
     }
 
     public void onPlayerCollision() {
-        Gdx.app.log("Collision Coin","");
+        GameHud.increaseScore(1);
     }
 
     @Override
