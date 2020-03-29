@@ -18,3 +18,4 @@ List of features to implement before next release :
 # Known bugs
 List of known bugs to fix :
 - Collision Detection when player is moving horizontally
+- Sometimes score isn't increase when player hit coin
