@@ -168,6 +168,12 @@ public class Player extends Sprite implements Disposable {
         fixtureDef.shape = polygonShape;
         body.createFixture(fixtureDef);
 
+        EdgeShape head = new EdgeShape();
+        head.set(getX(),getY(), getX()-1,getY());
+        fixtureDef.shape = head;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef).setUserData("player");
+
     }
 
     @Override

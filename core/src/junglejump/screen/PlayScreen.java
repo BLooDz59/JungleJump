@@ -16,8 +16,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import junglejump.JungleJump;
 import junglejump.sprite.Background;
+import junglejump.sprite.Coin;
 import junglejump.sprite.Player;
 import junglejump.tools.WorldConst;
+import junglejump.tools.WorldContactListener;
 import junglejump.tools.WorldCreator;
 
 public class PlayScreen implements Screen {
@@ -57,6 +59,7 @@ public class PlayScreen implements Screen {
 
         //Initialize Box2D World
         world = new World(Vector2.Y.scl(-WorldConst.GRAVITY),true);
+        world.setContactListener(new WorldContactListener());
         debugRenderer = new Box2DDebugRenderer();
         WorldCreator creator = new WorldCreator(world, map);
         creator.init();
@@ -107,7 +110,6 @@ public class PlayScreen implements Screen {
         camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2f, 100 - camera.viewportHeight / 2f);
         camera.update();
         renderer.setView(camera);
-        System.out.println(renderer.getViewBounds().toString());
     }
 
     private void handleInput() {

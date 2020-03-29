@@ -11,7 +11,7 @@ List of features to implement before next release :
     - Start Point
     - Coins to collect
     - End Point
-- Add coin
+- Add coin ✅
 - Add UI
     - Score
 
