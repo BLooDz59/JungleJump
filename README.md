@@ -1,21 +1,8 @@
 # JungleJump
 2D Plateform Game made with libGDX
 
-# Features
-List of features to implement before next release :
-- Create Main Menu ✅
-    - Play Button ✅
-    - Settings Button ✅
-    - Quit Button ✅
-- Create a demo level
-    - Start Point
-    - Coins to collect
-    - End Point
-- Add coin ✅
-- Add UI ✅
-    - Score ✅
-
-# Known bugs
-List of known bugs to fix :
-- Collision Detection when player is moving horizontally
-- Sometimes score isn't increase when player hit coin
+# Ressources
+## Assets
+- [Free Jungle Cartoon GUI by Free Game Assets (GUI, Sprite, Tilesets)](https://free-game-assets.itch.io/free-jungle-cartoon-gui)
+- [Pixellari Font | dafont.com](https://www.dafont.com/pixellari.font)
+- [Jungle Asset Pack by Jesse Munguia](https://jesse-m.itch.io/jungle-pack)
