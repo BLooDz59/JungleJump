@@ -3,8 +3,9 @@ package junglejump.sprite;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Background {
+public class Background implements Disposable {
 
     private Array<Texture> textures;
     private float x;
@@ -21,6 +22,14 @@ public class Background {
         for (Texture texture : textures) {
             sb.draw(texture,x, 0, width, height);
             sb.draw(texture,x + width, 0, width, height);
+        }
+    }
+
+
+    @Override
+    public void dispose() {
+        for (Texture texture : textures) {
+            texture.dispose();
         }
     }
 }

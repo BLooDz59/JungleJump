@@ -158,5 +158,6 @@ public class PlayScreen implements Screen {
         debugRenderer.dispose();
         playerAtlas.dispose();
         player.dispose();
+        background.dispose();
     }
 }
