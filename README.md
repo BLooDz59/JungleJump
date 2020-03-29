@@ -18,4 +18,3 @@ List of features to implement before next release :
 # Known bugs
 List of known bugs to fix :
 - Collision Detection when player is moving horizontally
-- Game crash on click when background is enable
